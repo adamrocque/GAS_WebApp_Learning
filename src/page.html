@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+ 
+    <?!= include("page-css"); ?>
+  </head>
+  <body>
+
+    <div class = "container">
+
+
+      <div class ="row">
+        <div class="input-field col s6">
+          <input placeholder="123 Company" id="business_txt" type="text" class="validate" required>
+          <label for="business_txt">Business Name</label>
+        </div>
+        <div class="input-field col s6">
+          <input placeholder="123@company.com" id="email_txt" type="text" class="validate" required>
+          <label for="email_txt">Email</label>
+        </div> 
+      </div> <!-- ROW CLOSE -->
+    
+
+      <div class ="row">
+        <div class="input-field col s6">
+          <select id="app">
+            <option  disabled selected>Choose your app</option>
+            
+            <?!= list; ?>
+            
+          </select>
+          <label>Application</label>
+        </div>        
+        <div class="input-field col s6">
+          <input id="prefDate" type="text" class="datepicker">
+          <label for="prefDate">Pick Appointment Date</label>
+        </div>        
+      </div> <!-- ROW CLOSE -->
+      
+      <div class ="row">
+        <div class="input-field col s6">
+          <input placeholder="1A1 A1A" id="postal" type="text" class="validate">
+          <label for="postal">Postal Code</label>
+        </div>
+        <div class="input-field col s6">
+          <input disabled id="estimate" type="text" class="validate" >
+          <label for="estimate" class="active">Estimate</label>
+        </div> 
+      </div> <!-- ROW CLOSE -->
+
+      <div class ="row">
+        <div class="input-field col s6">
+          <i class="material-icons prefix">textsms</i>
+          <input type="text" id="favfunction" class="autocomplete">
+          <label for="favfunction">Your Fav Function</label>          
+        </div>
+        <div class="input-field col s6">
+          
+        </div> 
+      </div> <!-- ROW CLOSE -->
+
+      <div class="row">
+        <button id="btn" class="waves-effect waves-light btn-small green darken-2"><i class="material-icons left">lightbulb_outline</i>Run It!</button>
+      </div> <!-- ROW CLOSE -->
+    </div> <!-- CONTAINER CLOSE -->
+  </body>
+
+  <!-- Compiled and minified JavaScript -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>  
+  <?!= include("page-js"); ?>
+</html>

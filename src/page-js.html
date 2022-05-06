@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+  </head>
+  <body>
+    
+  </body>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Get the button element and the input element for postal code
+      document.getElementById("btn").addEventListener("click", buttonClickAction);
+      document.getElementById("postal").addEventListener("input", getEstimate);
+
+
+      // Initialize All Drop Down List Elements
+      var selectBoxes = document.querySelectorAll('select');
+      M.FormSelect.init(selectBoxes);
+      
+      // Run the script getCalendarBusyDays, and on success, pass anything returned to run the function populateDate
+      google.script.run.withSuccessHandler(populateDate).getCalendarBusyDays()
+
+      // Run the script getWords, and on success, pass anything returned to run the function populateWords
+      google.script.run.withSuccessHandler(populateWords).getWords();
+      
+
+
+    });
+
+    function populateWords(words){
+      var autoCompl = document.getElementById('favfunction');
+      var instances = M.Autocomplete.init(autoCompl, {data: words});      
+    }
+    
+    function populateDate(disabledDays){
+      // Initialize Date Picker Element
+      var datePicker = document.getElementById('prefDate');
+      var instances = M.Datepicker.init(datePicker, { 
+        autoClose: true,  
+        disableWeekends: true,
+        disableDayFn: function(day){
+          // Checks the list passed in, if found the date in the list, blocks from the datepicker
+          return disabledDays.indexOf(day.valueOf()) > -1 || day.valueOf() < new Date().valueOf(); 
+
+        }
+      });
+    }
+
+
+
+    function buttonClickAction(){
+      
+      var toValidate = {
+        fn: "First Name is Required!",
+        ln: "Last Name is Required!"
+      };
+
+      var idKeys = Object.keys(toValidate);
+
+      var allValid = true
+
+      idKeys.forEach(function(id){
+        var isValid = checkIfValid(id, toValidate[id])
+
+        if (!isValid){
+          allValid = false;
+        }
+      });
+
+      if (allValid){
+        addRecord();
+      }
+
+    }
+
+    function checkIfValid(elementId, message){
+      var isValid = document.getElementById(elementId).checkValidity();
+
+      if (!isValid){
+        // Warn user missing data
+        M.toast({html: message});
+        return false
+      }      
+      return true
+
+    }
+    function addRecord(){
+      var userInfo = {};
+      var business = document.getElementById("business_txt");
+      var email = document.getElementById("email_txt");
+      var myApp = document.getElementById("app");
+      var postalCode = document.getElementById("postal");
+      var shippingEst = document.getElementById("estimate");
+
+
+      userInfo.businessName = business.value;
+      userInfo.email = email.value;
+      userInfo.sheet = myApp.value;
+      userInfo.postal = postalCode.value;
+      userInfo.shipEst = shippingEst.value;
+      
+      google.script.run.userClicked(userInfo)
+      
+      business.value = "";
+      email.value = "";
+      myApp.selectedIndex = 0;  
+      M.FormSelect.init(myApp);
+      postalCode.value = "";
+      shippingEst.value = ""
+      M.updateTextFields();
+    }
+
+    function getEstimate(){
+      
+      var postal = document.getElementById("postal").value;
+      if (postal.length === 7){
+        shipping_estiamte = google.script.run.withSuccessHandler(updateEstimate).getCost(postal)
+      }
+      else{
+        document.getElementById("estimate").value = "";
+        M.updateTextFields();
+      }
+    }
+
+    function updateEstimate(cost){
+        document.getElementById("estimate").value = cost;
+        M.updateTextFields();
+    }
+  </script>    
+
+</html>
